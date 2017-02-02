@@ -41,7 +41,7 @@ AppAsset::register($this);
             ['label' => Yii::t('app','Jobs'), 'url' => ['/site/index'], 'visible' => !Yii::$app->user->isGuest],
             ['label' => Yii::t('app','Invoices'), 'url' => ['/site/index'], 'visible' => !Yii::$app->user->isGuest],
             ['label' => Yii::t('app','Timecards'), 'url' => ['/site/index'], 'visible' => !Yii::$app->user->isGuest],
-            ['label' => Yii::t('app','Customers'), 'url' => ['/site/index'], 'visible' => !Yii::$app->user->isGuest],
+            ['label' => Yii::t('app','Customers'), 'url' => ['/customer/index'], 'visible' => !Yii::$app->user->isGuest],
             ['label' => Yii::t('app','Open Orders'), 'url' => ['/site/index'], 'visible' => !Yii::$app->user->isGuest],
             ['label' => Yii::t('app','Categories'), 'url' => ['/site/index'], 'visible' => !Yii::$app->user->isGuest],
             ['label' => Yii::t('app','Settings'), 'url' => ['/site/index'], 'visible' => !Yii::$app->user->isGuest],
