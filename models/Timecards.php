@@ -36,7 +36,7 @@ class Timecards extends \yii\db\ActiveRecord
         return [
             [['employee_id', 'job_id', 'dateWorked', 'hours'], 'required'],
             [['employee_id', 'job_id'], 'integer'],
-            [['dateWorked'], 'safe'],
+            [['dateWorked'], 'date', 'format' => 'yyyy-MM-dd'],
             [['hours'], 'number'],
             [['description', 'comments'], 'string'],
             [['employee_id'], 'exist', 'skipOnError' => true, 'targetClass' => Employees::className(), 'targetAttribute' => ['employee_id' => 'id']],

@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\jui\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Timecards */
@@ -18,7 +19,11 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'job_id')->dropDownList($activeJobs, ['prompt'=>Yii::t('app','Select Job')]) ?>
 
-    <?= $form->field($model, 'dateWorked')->textInput() ?>
+    <?= $form->field($model, 'dateWorked')->widget(DatePicker::classname(),[
+        'clientOptions' => [
+            'altFormat' => 'yy-MM-dd',
+        ]
+    ]); ?>
 
     <?= $form->field($model, 'hours')->textInput(['maxlength' => true]) ?>
 
