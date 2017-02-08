@@ -2,9 +2,12 @@
 
 namespace app\controllers;
 
+use app\models\Employees;
+use app\models\Jobs;
 use Yii;
 use app\models\Timecards;
 use app\models\TimecardsSearch;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -65,11 +68,33 @@ class TimecardsController extends Controller
     {
         $model = new Timecards();
 
+	    // Get Active Employees for Timecard
+	    $employees = Employees::find()
+	                        ->where(['active'=>Employees::EMPLOYEE_ACTIVE])
+	                        ->orderBy('name')
+	                        ->all();
+
+	    // Show the employee ID after their name - not sure if there is an anonymous function to do this.
+	    foreach ($employees as $employee) {
+	    	$employee->name = $employee->name . ' #' . $employee->id;
+	    }
+
+	    // Get Active Jobs for Timecard
+	    $jobs = Jobs::find()
+		                ->where(['status'=>Jobs::JOBS_OPEN])
+		                ->orderBy('shopNumber')
+		                ->all();
+	    foreach ($jobs as $job) {
+	    	$job->description = $job->shopNumber . $job->id . ' - ' . $job->description;
+	    }
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'activeEmployees' => ArrayHelper::map($employees, 'id', 'name'),
+                'activeJobs' => ArrayHelper::map($jobs, 'id', 'description'),
             ]);
         }
     }

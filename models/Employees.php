@@ -19,6 +19,9 @@ use Yii;
  */
 class Employees extends \yii\db\ActiveRecord
 {
+	const EMPLOYEE_ACTIVE = 1;
+	const EMPLOYEE_INACTIVE = 0;
+
     /**
      * @inheritdoc
      */

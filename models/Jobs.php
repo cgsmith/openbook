@@ -28,6 +28,13 @@ use Yii;
  */
 class Jobs extends \yii\db\ActiveRecord
 {
+
+	const JOBS_HOLD = 'HOLD';
+	const JOBS_INVOICED = 'Invoiced';
+	const JOBS_OPEN = 'OPEN';
+	const JOBS_PAID = 'PAID';
+	const JOBS_VOID = 'VOID';
+
     /**
      * @inheritdoc
      */

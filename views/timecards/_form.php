@@ -5,6 +5,8 @@ use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Timecards */
+/* @var $activeEmployees app\models\Employees */
+/* @var $activeJobs app\models\Jobs */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
@@ -12,9 +14,9 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'employee_id')->textInput() ?>
+    <?= $form->field($model, 'employee_id')->dropDownList($activeEmployees,['prompt'=>Yii::t('app','Select Employee')]) ?>
 
-    <?= $form->field($model, 'job_id')->textInput() ?>
+    <?= $form->field($model, 'job_id')->dropDownList($activeJobs, ['prompt'=>Yii::t('app','Select Job')]) ?>
 
     <?= $form->field($model, 'dateWorked')->textInput() ?>
 
