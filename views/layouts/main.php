@@ -37,15 +37,15 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
             ['label' => Yii::t('app','Dashboard'), 'url' => ['/site/index'], 'visible' => !Yii::$app->user->isGuest],
-            ['label' => Yii::t('app','Quotes'), 'url' => ['/site/index'], 'visible' => !Yii::$app->user->isGuest],
-            ['label' => Yii::t('app','Jobs'), 'url' => ['/site/index'], 'visible' => !Yii::$app->user->isGuest],
-            ['label' => Yii::t('app','Invoices'), 'url' => ['/site/index'], 'visible' => !Yii::$app->user->isGuest],
-            ['label' => Yii::t('app','Timecards'), 'url' => ['/site/index'], 'visible' => !Yii::$app->user->isGuest],
+            ['label' => Yii::t('app','Quotes'), 'url' => ['/quotes/index'], 'visible' => !Yii::$app->user->isGuest],
+            ['label' => Yii::t('app','Jobs'), 'url' => ['/jobs/index'], 'visible' => !Yii::$app->user->isGuest],
+            ['label' => Yii::t('app','Invoices'), 'url' => ['/invoices/index'], 'visible' => !Yii::$app->user->isGuest],
+            ['label' => Yii::t('app','Timecards'), 'url' => ['/timecards/index'], 'visible' => !Yii::$app->user->isGuest],
             ['label' => Yii::t('app','Customers'), 'url' => ['/customer/index'], 'visible' => !Yii::$app->user->isGuest],
             ['label' => Yii::t('app','Open Orders'), 'url' => ['/site/index'], 'visible' => !Yii::$app->user->isGuest],
             ['label' => Yii::t('app','Categories'), 'url' => ['/site/index'], 'visible' => !Yii::$app->user->isGuest],
-            ['label' => Yii::t('app','Settings'), 'url' => ['/site/index'], 'visible' => !Yii::$app->user->isGuest],
-            ['label' => Yii::t('app','Search'), 'url' => ['/site/index'], 'visible' => !Yii::$app->user->isGuest],
+            ['label' => Yii::t('app','Settings'), 'url' => ['/settings/index'], 'visible' => !Yii::$app->user->isGuest],
+            ['label' => Yii::t('app','Search'), 'url' => ['/search/index'], 'visible' => !Yii::$app->user->isGuest],
              Yii::$app->user->isGuest ?
                 ['label' => Yii::t('app','Login'), 'url' => ['/user/security/login']] :
                 ['label' => Yii::t('app','Logout') . ' (' . Yii::$app->user->identity->username . ')',
