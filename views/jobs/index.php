@@ -22,13 +22,37 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'quote_id',
-            'quote_rev',
+            [
+                'attribute' => 'dateReceived',
+                'value' => 'dateReceived',
+                'format' => 'date',
+            ],
+            [
+                'label' => Yii::t('app','Customer'),
+                'attribute' => 'quotes.customer_id',
+                'filter' => $activeCustomers,
+                'format' => 'raw',
+                'value' => function ($data) {
+
+                    return Html::a(
+                        $data->shopNumber,
+                        'customers/view?id='//.$data->customer_id
+                    );
+                }
+            ],
+            [
+                'label' => Yii::t('app','Job #'),
+                'attribute' => 'id',
+            ],
+            'PONumber',
             'customer_shopnumber',
-            'shopNumber',
+            'pricing.patternNumber',
+            'pricing.patternOwner',
+            'pricing.totalPrice',
+            'pricing.totalHours',
+            'status',
+            'id',
             // 'dateReceived',
             // 'dateDue',
             // 'timeMaterial:datetime',

@@ -41,12 +41,17 @@ class JobsSearch extends Jobs
      */
     public function search($params)
     {
-        $query = Jobs::find();
+        $query = Jobs::find()->joinWith([
+	        'pricing',
+	        'timecards',
+	        'customers',
+        ]);
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => ['defaultOrder' => ['id' => SORT_DESC]],
         ]);
 
         $this->load($params);

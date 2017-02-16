@@ -70,13 +70,13 @@ class Jobs extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'quote_id' => Yii::t('app', 'Quote ID'),
             'quote_rev' => Yii::t('app', 'Quote Rev'),
-            'customer_shopnumber' => Yii::t('app', 'Customer Shopnumber'),
+            'customer_shopnumber' => Yii::t('app', 'SO#'),
             'shopNumber' => Yii::t('app', 'Shop Number'),
             'dateReceived' => Yii::t('app', 'Date Received'),
             'dateDue' => Yii::t('app', 'Date Due'),
             'timeMaterial' => Yii::t('app', 'Time Material'),
             'status' => Yii::t('app', 'Status'),
-            'PONumber' => Yii::t('app', 'Ponumber'),
+            'PONumber' => Yii::t('app', 'Purchase Order'),
             'patternShrink' => Yii::t('app', 'Pattern Shrink'),
             'finishStock' => Yii::t('app', 'Finish Stock'),
             'description' => Yii::t('app', 'Description'),
@@ -92,5 +92,28 @@ class Jobs extends \yii\db\ActiveRecord
     public function getTimecards()
     {
         return $this->hasMany(Timecards::className(), ['job_id' => 'id']);
+    }
+
+    // Junction table (viaTable)
+	public function getQuotes()
+	{
+		return $this->hasOne(Quotes::className(), ['id' => 'quote_id']);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getPricing()
+	{
+		return $this->hasOne(Quotepricing::className(), ['job_id' => 'id']);
+	}
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCustomers()
+    {
+        return $this->hasOne(Customers::className(), ['id' => 'customer_id'])
+                    ->via('quotes');
     }
 }
