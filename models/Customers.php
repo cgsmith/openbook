@@ -23,6 +23,8 @@ use Yii;
  */
 class Customers extends \yii\db\ActiveRecord
 {
+	const CUSTOMER_ACTIVE = 1;
+	const CUSTOMER_INACTIVE = 0;
     /**
      * @inheritdoc
      */

@@ -53,4 +53,28 @@ class Quotes extends \yii\db\ActiveRecord
             'category' => Yii::t('app', 'Category'),
         ];
     }
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getDetails()
+	{
+		return $this->hasOne(Quotedetails::className(), ['quote_id' => 'id']);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getPricing()
+	{
+		return $this->hasOne(Quotepricing::className(), ['quote_id' => 'id']);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getCustomers()
+	{
+		return $this->hasOne(Customers::className(), ['id' => 'customer_id']);
+	}
 }

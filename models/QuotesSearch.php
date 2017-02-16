@@ -12,6 +12,12 @@ use app\models\Quotes;
  */
 class QuotesSearch extends Quotes
 {
+	// add the public attributes that will be used to store the data to be search
+	public $patternNumber;
+	public $patternOwner;
+	public $dateIssued;
+	public $customer;
+
     /**
      * @inheritdoc
      */
@@ -19,6 +25,7 @@ class QuotesSearch extends Quotes
     {
         return [
             [['id', 'customer_id', 'contact_id', 'revision', 'job_id'], 'integer'],
+	        [['patternNumber', 'customer', 'dateIssued', 'patternOwner'], 'safe'],
             [['notes', 'category'], 'safe'],
         ];
     }
@@ -41,12 +48,18 @@ class QuotesSearch extends Quotes
      */
     public function search($params)
     {
-        $query = Quotes::find();
+        $query = Quotes::find()->joinWith([
+        	'pricing' => function ($query) {
+		        //$query->onCondition(['details.status' => Order::STATUS_ACTIVE]);
+        	    $query->andWhere(['quotepricing.revision' => 'quotes.revision']);
+	        },
+	        'customers',
+        ]);
 
         // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+	        'sort' => ['defaultOrder' => ['id' => SORT_DESC]]
         ]);
 
         $this->load($params);
@@ -59,15 +72,19 @@ class QuotesSearch extends Quotes
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
-            'customer_id' => $this->customer_id,
-            'contact_id' => $this->contact_id,
-            'revision' => $this->revision,
-            'job_id' => $this->job_id,
+            'quotes.id' => $this->id,
+            'quotes.customer_id' => $this->customer_id,
+            'quotes.contact_id' => $this->contact_id,
+            'quotes.revision' => $this->revision,
+            'quotes.job_id' => $this->job_id,
         ]);
 
+	    // Filter query and join
         $query->andFilterWhere(['like', 'notes', $this->notes])
-            ->andFilterWhere(['like', 'category', $this->category]);
+            ->andFilterWhere(['like', 'category', $this->category])
+	        ->andFilterWhere(['like','quotepricing.dateIssued', $this->dateIssued])
+	        ->andFilterWhere(['like','quotepricing.patternOwner', $this->patternOwner])
+	        ->andFilterWhere(['like','quotepricing.patternNumber', $this->patternNumber]);
 
         return $dataProvider;
     }

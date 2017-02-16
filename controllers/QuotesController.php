@@ -2,9 +2,11 @@
 
 namespace app\controllers;
 
+use app\models\Customers;
 use Yii;
 use app\models\Quotes;
 use app\models\QuotesSearch;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -38,9 +40,21 @@ class QuotesController extends Controller
         $searchModel = new QuotesSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+	    // Get Active Customers for searching
+		$activeCustomers = ArrayHelper::map(
+								Customers::find()->asArray()
+									->where(['active'=>Customers::CUSTOMER_ACTIVE])
+									->orderBy('shopNumber')
+									->all()
+									,
+								'id',
+								'shopNumber'
+		);
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+	        'activeCustomers' => $activeCustomers,
         ]);
     }
 
