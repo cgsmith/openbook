@@ -21,13 +21,11 @@ use yii\jui\DatePicker;
 
     <?= $form->field($model, 'dateWorked')->widget(DatePicker::classname(),[
         'clientOptions' => [
-            'altFormat' => 'yy-MM-dd',
+            'dateFormat' => 'yyyy-MM-dd',
         ]
     ]); ?>
 
     <?= $form->field($model, 'hours')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
 
     <?= $form->field($model, 'comments')->textarea(['rows' => 6]) ?>
 
