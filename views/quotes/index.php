@@ -14,7 +14,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="quotes-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
         <?= Html::a(Yii::t('app', 'Create Quotes'), ['create'], ['class' => 'btn btn-success']) ?>
@@ -31,6 +30,9 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => Yii::t('app','Quote #'),
                 'attribute' => 'id',
+	            'value' => function ($model) {
+                	return ($model->revision > 0) ? $model->id  . ' R' . $model->revision : $model->id;
+	            }
             ],
             [
                 'label' => Yii::t('app','Customer'),
@@ -53,8 +55,23 @@ $this->params['breadcrumbs'][] = $this->title;
 		        'value' => 'pricing.patternOwner'
 	        ],
 	        'pricing.totalPrice:currency',
-            // 'category',
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+            	'class' => 'yii\grid\ActionColumn',
+	            'buttons' => [
+	            	'view' => function ($url, $model) {
+	                    $url .= ($model->revision > 0) ? '&revision=' . $model->revision : '';
+			            return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, [
+				            'title' => Yii::t('yii', 'View'),
+			            ]);
+				    },
+	            	'update' => function ($url, $model) {
+	                    $url .= ($model->revision > 0) ? '&revision=' . $model->revision : '';
+			            return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, [
+				            'title' => Yii::t('yii', 'Update'),
+			            ]);
+				    },
+	            ]
+            ],
         ],
     ]); ?>
 </div>

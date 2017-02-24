@@ -3,6 +3,8 @@
 namespace app\controllers;
 
 use app\models\Customers;
+use app\models\Quotedetails;
+use app\models\Quotepricing;
 use Yii;
 use app\models\Quotes;
 use app\models\QuotesSearch;
@@ -41,15 +43,7 @@ class QuotesController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
 	    // Get Active Customers for searching
-		$activeCustomers = ArrayHelper::map(
-								Customers::find()->asArray()
-									->where(['active'=>Customers::CUSTOMER_ACTIVE])
-									->orderBy('shopNumber')
-									->all()
-									,
-								'id',
-								'shopNumber'
-		);
+		$activeCustomers = ArrayHelper::map($this->getActiveCustomers('shopNumber'),'id','shopNumber');
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -58,15 +52,17 @@ class QuotesController extends Controller
         ]);
     }
 
-    /**
-     * Displays a single Quotes model.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionView($id)
+	/**
+	 * Displays a single Quotes model.
+	 *
+	 * @param integer $id
+	 * @param int $revision
+	 * @return mixed
+	 */
+    public function actionView($id, $revision = 0)
     {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $this->findModel($id, $revision),
         ]);
     }
 
@@ -77,13 +73,21 @@ class QuotesController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Quotes();
+        $quote = new Quotes();
+	    $quotePricing = new Quotepricing();
+	    $quoteDetails = new Quotedetails();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+	    // Get Active Customers for searching
+	    $activeCustomers = ArrayHelper::map($this->getActiveCustomers(),'id','name');
+
+        if ($quote->load(Yii::$app->request->post()) && $quote->save()) {
+            return $this->redirect(['view', 'id' => $quote->id, $quote->revision]);
         } else {
             return $this->render('create', [
-                'model' => $model,
+                'quote' => $quote,
+                'quotePricing' => $quotePricing,
+                'quoteDetails' => $quoteDetails,
+	            'activeCustomers' => $activeCustomers,
             ]);
         }
     }
@@ -120,19 +124,35 @@ class QuotesController extends Controller
         return $this->redirect(['index']);
     }
 
-    /**
-     * Finds the Quotes model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Quotes the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
+	/**
+	 * Finds the Quotes model based on its primary key value.
+	 * If the model is not found, a 404 HTTP exception will be thrown.
+	 *
+	 * @param integer $id
+	 * @param int $revision
+	 * @return Quotes the loaded model
+	 * @throws NotFoundHttpException if the model cannot be found
+	 */
+    protected function findModel($id, $revision = 0)
     {
-        if (($model = Quotes::findOne($id)) !== null) {
+        if (($model = Quotes::findOne(['id' => $id, 'revision' => $revision])) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+	/**
+	 * Returns all active customers ordered by name by default
+	 *
+	 * @param string $order
+	 * @return array of Customers
+	 */
+    protected function getActiveCustomers($order='name')
+    {
+    	return Customers::find()->asArray()
+		             ->where(['active'=>Customers::CUSTOMER_ACTIVE])
+		             ->orderBy($order)
+		             ->all();
     }
 }
