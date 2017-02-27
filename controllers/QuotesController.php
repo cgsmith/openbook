@@ -8,7 +8,9 @@ use app\models\Quotepricing;
 use Yii;
 use app\models\Quotes;
 use app\models\QuotesSearch;
+use yii\db\Query;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -61,8 +63,14 @@ class QuotesController extends Controller
 	 */
     public function actionView($id, $revision = 0)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id, $revision),
+	    $activeCustomers = ArrayHelper::map($this->getActiveCustomers(),'id','name');
+	    $model = $this->findModel($id, $revision);
+
+	    return $this->render('view', [
+            'quote' => $model,
+            'quotePricing' => $model->getPricing(),
+            'quoteDetails' => $model->getDetails(),
+            'activeCustomers' => $activeCustomers,
         ]);
     }
 
@@ -98,15 +106,21 @@ class QuotesController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
+    public function actionUpdate($id, $revision = 0)
     {
-        $model = $this->findModel($id);
+    	$activeCustomers = ArrayHelper::map($this->getActiveCustomers(),'id','name');
+	    $quote = $this->findModel($id, $revision);
+		$quotePricing = Quotepricing::find()->where(['quote_id' => $quote->id, 'revision'=>$quote->revision])->one();
+		$quoteDetails = Quotedetails::find()->where(['quote_id' => $quote->id, 'revision'=>$quote->revision])->all();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($quote->load(Yii::$app->request->post()) && $quote->save()) {
+            return $this->redirect(['view', 'id' => $quote->id, $quote->revision]);
         } else {
             return $this->render('update', [
-                'model' => $model,
+                'quote' => $quote,
+                'quotePricing' => $quotePricing,
+                'quoteDetails' => $quoteDetails,
+                'activeCustomers' => $activeCustomers,
             ]);
         }
     }
@@ -141,6 +155,36 @@ class QuotesController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+	/**
+	 * Fetch list of categories for quote pricing
+	 *
+	 * @param null $type
+	 * @param null $q
+	 *
+	 * @return string
+	 */
+	public function actionRemoteList($type = null, $q = null)
+	{
+		// Bail if type or query is null
+		if ($type == null || $q == null) {
+			return Json::encode([]);
+		}
+
+		$query = new Query();
+		$query->select($type)
+		      ->distinct()
+		      ->from('quotes')
+		      ->where(['like',$type,$q])
+		      ->orderBy($type);
+		$command = $query->createCommand();
+		$data = $command->queryAll();
+		$out = [];
+		foreach ($data as $d) {
+			$out[] = ['value' => $d[$type]];
+		}
+		echo Json::encode($out);
+	}
 
 	/**
 	 * Returns all active customers ordered by name by default

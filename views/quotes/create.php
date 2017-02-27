@@ -9,7 +9,7 @@ use yii\helpers\Html;
 /* @var $quoteDetails app\models\Quotedetails */
 /* @var $activeCustomers app\models\Customers */
 
-$this->title = Yii::t('app', 'Create Quotes');
+$this->title = Yii::t('app', 'Create New Quote');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Quotes'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

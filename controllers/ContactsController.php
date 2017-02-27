@@ -133,12 +133,6 @@ class ContactsController extends Controller
 			if ($parents != null) {
 				$cat_id = $parents[0];
 				$out = Contacts::find()->where(['customer_id'=>$cat_id])->asArray()->all();
-				// the getSubCatList function will query the database based on the
-				// cat_id and return an array like below:
-				// [
-				//    ['id'=>'<sub-cat-id-1>', 'name'=>'<sub-cat-name1>'],
-				//    ['id'=>'<sub-cat_id_2>', 'name'=>'<sub-cat-name2>']
-				// ]
 				echo Json::encode(['output'=>$out, 'selected'=>'']);
 				return;
 			}

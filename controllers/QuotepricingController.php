@@ -5,6 +5,8 @@ namespace app\controllers;
 use Yii;
 use app\models\Quotepricing;
 use app\models\QuotepricingSearch;
+use yii\db\Query;
+use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -27,6 +29,36 @@ class QuotepricingController extends Controller
                 ],
             ],
         ];
+    }
+
+	/**
+	 * Fetch list of categories for quote pricing
+	 *
+	 * @param null $type
+	 * @param null $q
+	 *
+	 * @return string
+	 */
+    public function actionRemoteList($type = null, $q = null)
+    {
+    	// Bail if type or query is null
+    	if ($type == null || $q == null) {
+		    return Json::encode([]);
+	    }
+
+    	$query = new Query();
+	    $query->select($type)
+		      ->distinct()
+	          ->from('quotepricing')
+	          ->where(['like',$type,$q])
+	          ->orderBy($type);
+	    $command = $query->createCommand();
+	    $data = $command->queryAll();
+	    $out = [];
+	    foreach ($data as $d) {
+		    $out[] = ['value' => $d[$type]];
+	    }
+	    echo Json::encode($out);
     }
 
     /**
