@@ -5,6 +5,7 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 use kartik\widgets\DepDrop;
 use kartik\widgets\Typeahead;
+use app\components\SublinkWidget;
 
 /* @var $this yii\web\View */
 /* @var $quote app\models\Quotes */
@@ -18,33 +19,7 @@ use kartik\widgets\Typeahead;
 
     <div class="form-group">
 
-        <?php
-            if (!$quote->isNewRecord) { ?>
-                <div class="btn-group">
-                    <button type="button" class="btn"><?= Yii::t('app','Edit Quote')?></button>
-                    <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="caret"></span>
-                        <span class="sr-only"></span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a href="#"><?= Yii::t('app','Edit Current Revision')?></a></li>
-                    </ul>
-                </div>
-                <?= Html::submitButton(Yii::t('app', 'Clone'), ['class' => 'btn']);?>
-                <?= Html::submitButton(Yii::t('app', 'Email Quote'), ['class' => 'btn']);?>
-                <div class="btn-group">
-                    <button type="button" class="btn"><?= Yii::t('app','Convert to Job')?></button>
-                    <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="caret"></span>
-                        <span class="sr-only"></span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a href="#"><?= Yii::t('app','Add to Pending')?></a></li>
-                    </ul>
-                </div>
-                <?= Html::submitButton(Yii::t('app', 'Print'), ['class' => 'btn']);?>
-                <?= Html::submitButton(Yii::t('app', 'Delete'), ['class' => 'btn btn-danger']);?>
-        <?php } ?>
+        <?= SublinkWidget::widget(['type' => 'quote', 'status' => !$quote->isNewRecord, 'id' => $quote->id, 'revision' => $quote->revision]); ?>
 
     </div>
     <?php $form = ActiveForm::begin([

@@ -138,6 +138,13 @@ class QuotesController extends Controller
         return $this->redirect(['index']);
     }
 
+
+    public function actionClone($id, $revision)
+    {
+        $cloneQuote;
+        return $this->redirect(['update', 'id' => $this->id]);
+    }
+
 	/**
 	 * Finds the Quotes model based on its primary key value.
 	 * If the model is not found, a 404 HTTP exception will be thrown.
