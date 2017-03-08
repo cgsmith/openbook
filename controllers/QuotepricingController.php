@@ -10,6 +10,8 @@ use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
+use dektrium\user\filters\AccessRule;
 
 /**
  * QuotepricingController implements the CRUD actions for Quotepricing model.
@@ -22,6 +24,18 @@ class QuotepricingController extends Controller
     public function behaviors()
     {
         return [
+	        'access' => [
+		        'class'      => AccessControl::className(),
+		        'ruleConfig' => [
+			        'class' => AccessRule::className(),
+		        ],
+		        'rules'      => [
+			        [
+				        'allow' => true,
+				        'roles' => [ 'admin', '@' ],
+			        ],
+		        ],
+	        ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

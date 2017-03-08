@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use yii\filters\AccessControl;
+use dektrium\user\filters\AccessRule;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
@@ -17,17 +18,18 @@ class SiteController extends Controller
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['logout'],
-                'rules' => [
-                    [
-                        'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
+	        'access' => [
+		        'class' => AccessControl::className(),
+		        'ruleConfig' => [
+			        'class' => AccessRule::className(),
+		        ],
+		        'rules' => [
+			        [
+				        'allow'   => true,
+				        'roles'   => [ '@','admin' ],
+			        ],
+		        ],
+	        ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

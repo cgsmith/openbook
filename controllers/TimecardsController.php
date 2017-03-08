@@ -11,6 +11,8 @@ use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
+use dektrium\user\filters\AccessRule;
 
 /**
  * TimecardsController implements the CRUD actions for Timecards model.
@@ -23,6 +25,18 @@ class TimecardsController extends Controller
     public function behaviors()
     {
         return [
+	        'access' => [
+		        'class'      => AccessControl::className(),
+		        'ruleConfig' => [
+			        'class' => AccessRule::className(),
+		        ],
+		        'rules'      => [
+			        [
+				        'allow' => true,
+				        'roles' => [ 'admin', '@' ],
+			        ],
+		        ],
+	        ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
