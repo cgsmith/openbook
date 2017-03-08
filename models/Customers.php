@@ -75,4 +75,13 @@ class Customers extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Contacts::className(), ['customer_id' => 'id']);
     }
+
+	/**
+	 * @inheritdoc
+	 * @return CustomersQuery the active query used by this AR class.
+	 */
+	public static function find()
+	{
+		return new CustomersQuery(get_called_class());
+	}
 }
