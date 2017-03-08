@@ -18,8 +18,8 @@ class CompanySearch extends Company
     public function rules()
     {
         return [
-            [['id', 'margin', 'payrollsetting'], 'integer'],
-            [['address', 'citystzip', 'phone', 'fax', 'nextpayroll'], 'safe'],
+            [['id', 'margin', 'payrollsetting', 'smtp_testing'], 'integer'],
+            [['address', 'citystzip', 'phone', 'fax', 'nextpayroll', 'payroll_emails', 'vacation_reminder_emails', 'smtp_user', 'smtp_password', 'smtp_from', 'smtp_bcc', 'smtp_port', 'smtp_server'], 'safe'],
             [['shoprate'], 'number'],
         ];
     }
@@ -65,12 +65,21 @@ class CompanySearch extends Company
             'margin' => $this->margin,
             'nextpayroll' => $this->nextpayroll,
             'payrollsetting' => $this->payrollsetting,
+            'smtp_testing' => $this->smtp_testing,
         ]);
 
         $query->andFilterWhere(['like', 'address', $this->address])
             ->andFilterWhere(['like', 'citystzip', $this->citystzip])
             ->andFilterWhere(['like', 'phone', $this->phone])
-            ->andFilterWhere(['like', 'fax', $this->fax]);
+            ->andFilterWhere(['like', 'fax', $this->fax])
+            ->andFilterWhere(['like', 'payroll_emails', $this->payroll_emails])
+            ->andFilterWhere(['like', 'vacation_reminder_emails', $this->vacation_reminder_emails])
+            ->andFilterWhere(['like', 'smtp_user', $this->smtp_user])
+            ->andFilterWhere(['like', 'smtp_password', $this->smtp_password])
+            ->andFilterWhere(['like', 'smtp_from', $this->smtp_from])
+            ->andFilterWhere(['like', 'smtp_bcc', $this->smtp_bcc])
+            ->andFilterWhere(['like', 'smtp_port', $this->smtp_port])
+            ->andFilterWhere(['like', 'smtp_server', $this->smtp_server]);
 
         return $dataProvider;
     }

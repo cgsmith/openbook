@@ -44,7 +44,7 @@ AppAsset::register($this);
             ['label' => Yii::t('app','Customers'), 'url' => ['/customer/index'], 'visible' => !Yii::$app->user->isGuest],
             ['label' => Yii::t('app','Open Orders'), 'url' => ['/site/open-orders'], 'visible' => !Yii::$app->user->isGuest],
             ['label' => Yii::t('app','Categories'), 'url' => ['/site/categories'], 'visible' => !Yii::$app->user->isGuest],
-            ['label' => Yii::t('app','Settings'), 'url' => ['/settings/index'], 'visible' => !Yii::$app->user->isGuest],
+            ['label' => Yii::t('app','Settings'), 'url' => ['/company/index'], 'visible' => !Yii::$app->user->isGuest],
             ['label' => Yii::t('app','Search'), 'url' => ['/search/index'], 'visible' => !Yii::$app->user->isGuest],
              Yii::$app->user->isGuest ?
                 ['label' => Yii::t('app','Login'), 'url' => ['/user/security/login']] :

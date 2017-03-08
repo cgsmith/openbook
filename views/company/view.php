@@ -37,6 +37,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'margin',
             'nextpayroll',
             'payrollsetting',
+            'payroll_emails:email',
+            'vacation_reminder_emails:email',
+            'smtp_user',
+            'smtp_password',
+            'smtp_from',
+            'smtp_bcc',
+            'smtp_port',
+            'smtp_server',
+            'smtp_testing',
         ],
     ]) ?>
 

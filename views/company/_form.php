@@ -30,6 +30,24 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'payrollsetting')->textInput() ?>
 
+    <?= $form->field($model, 'payroll_emails')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'vacation_reminder_emails')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'smtp_user')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'smtp_password')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'smtp_from')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'smtp_bcc')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'smtp_port')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'smtp_server')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'smtp_testing')->textInput() ?>
+
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
