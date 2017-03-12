@@ -129,12 +129,12 @@ class QuotesController extends Controller {
 			'quote_id' => $quote->id,
 			'revision' => $quote->revision
 		] )->one();
-		$quoteDetails    = Quotedetails::find()->where( [
-			'quote_id' => $quote->id,
-			'revision' => $quote->revision
-		] )->all();
+		$quoteDetails    = $quote->getDetails()->orderBy('lineItemOrder')->all();
 
-		if ( $quote->load( Yii::$app->request->post() ) && $quote->save() ) {
+
+
+		if ( $quote->load( Yii::$app->request->post() ) ) {
+			var_dump(Yii::$app->request->post());die;
 			return $this->redirect( [
 				'view',
 				'id' => $quote->id,

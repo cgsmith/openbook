@@ -31,7 +31,7 @@ class Quotes extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_id', 'contact_id', 'revision', 'category'], 'required'],
+            [['customer_id', 'contact_id', 'revision'], 'required'],
             [['customer_id', 'contact_id', 'revision', 'job_id'], 'integer'],
             [['notes'], 'string'],
             [['category'], 'string', 'max' => 64],
@@ -59,7 +59,7 @@ class Quotes extends \yii\db\ActiveRecord
 	 */
 	public function getDetails()
 	{
-		return $this->hasOne(Quotedetails::className(), ['quote_id' => 'id']);
+		return $this->hasMany(Quotedetails::className(), ['quote_id' => 'id']);
 	}
 
 	/**
