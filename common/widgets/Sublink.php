@@ -1,11 +1,11 @@
 <?php
-namespace app\components;
+namespace app\common\widgets;
 
 use yii\base\Widget;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-class SublinkWidget extends Widget
+class Sublink extends Widget
 {
     public $html;
 
@@ -89,37 +89,3 @@ class SublinkWidget extends Widget
         return '</ul>';
     }
 }
-/**
-
-<?= Html::submitButton(Yii::t('app', 'Print'), ['class' => 'btn btn-default']);?>
-<?= Html::submitButton(Yii::t('app', 'Delete'), ['class' => 'btn btn-danger']);?>
-<?php } ?>
-/**
-* <?php
-if (!$quote->isNewRecord) { ?>
-    <div class="btn-group">
-        <button type="button" class="btn btn-default"><?= Yii::t('app','Edit Quote')?></button>
-        <button type="button" class="btn  btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="caret"></span>
-            <span class="sr-only"></span>
-        </button>
-        <ul class="dropdown-menu">
-            <li><a href="#"><?= Yii::t('app','Edit Current Revision')?></a></li>
-        </ul>
-    </div>
-    <?= Html::submitButton(Yii::t('app', 'Clone'), ['class' => 'btn btn-default']);?>
-    <?= Html::submitButton(Yii::t('app', 'Email Quote'), ['class' => 'btn btn-default']);?>
-    <div class="btn-group">
-        <button type="button" class="btn btn-default"><?= Yii::t('app','Convert to Job')?></button>
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="caret"></span>
-            <span class="sr-only"></span>
-        </button>
-        <ul class="dropdown-menu">
-            <li><a href="#"><?= Yii::t('app','Add to Pending')?></a></li>
-        </ul>
-    </div>
-    <?= Html::submitButton(Yii::t('app', 'Print'), ['class' => 'btn btn-default']);?>
-    <?= Html::submitButton(Yii::t('app', 'Delete'), ['class' => 'btn btn-danger']);?>
-<?php } ?>
-*/

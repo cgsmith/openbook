@@ -1,11 +1,11 @@
 <?php
 
+use app\common\widgets\Sublink;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 use kartik\widgets\DepDrop;
 use kartik\widgets\Typeahead;
-use app\components\SublinkWidget;
 use yii\web\View;
 
 /* @var $this yii\web\View */
@@ -36,7 +36,7 @@ $this->registerJs(" $(document).on('mouseenter', '.quote-detail-row', function (
 
     <div class="form-group">
 
-        <?= SublinkWidget::widget(['type' => 'quote', 'status' => !$quote->isNewRecord, 'id' => $quote->id, 'revision' => $quote->revision]); ?>
+        <?= Sublink::widget(['type' => 'quote', 'status' => !$quote->isNewRecord, 'id' => $quote->id, 'revision' => $quote->revision]); ?>
 
     </div>
     <?php $form = ActiveForm::begin([
