@@ -8,8 +8,8 @@ use yii\helpers\Html;
 /* @var $quoteDetails app\models\Quotedetails */
 /* @var $activeCustomers app\models\Customers */
 
-$this->title = Yii::t('app', 'Update {modelClass}: ', [
-    'modelClass' => 'Quotes',
+$this->title = Yii::t('app', 'Update {modelClass} ', [
+    'modelClass' => 'Quote',
 ]) . $quote->id;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Quotes'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $quote->id, 'url' => ['view', 'id' => $quote->id]];
