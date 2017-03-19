@@ -67,7 +67,7 @@ class Quotes extends \yii\db\ActiveRecord
 	 */
 	public function getPricing()
 	{
-		return $this->hasOne(Quotepricing::className(), ['quote_id' => 'id']);
+		return $this->hasOne(Quotepricing::className(), ['quote_id' => 'id', 'revision' => 'revision']);
 	}
 
 	/**

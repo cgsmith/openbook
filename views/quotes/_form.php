@@ -27,7 +27,7 @@ $this->registerJs(" $(document).on('mouseenter', '.quote-detail-row', function (
         $(this).find(\":button\").show();
     }).on('mouseleave', '.quote-detail-row', function () {
         $(this).find(\":button\").hide();
-    }).on('click', ':button', function() {
+    }).on('click', '#quote-detail-remove', function() {
         $(this).parent().remove();
     });", View::POS_READY);
 ?>
@@ -50,8 +50,8 @@ $this->registerJs(" $(document).on('mouseenter', '.quote-detail-row', function (
     ]); ?>
 
     <div class="row" id="quote-header">
+        <?=Html::activeHiddenInput($quote, 'revision',['value'=>($quote->revision + 1)]); // Increment revision ?>
         <div class="col-md-6">
-
             <?php
             // Customer
             echo $form->field($quote, 'customer_id', ['attribute'=>Yii::t('app','Customer')])->dropDownList($activeCustomers, [
@@ -59,9 +59,7 @@ $this->registerJs(" $(document).on('mouseenter', '.quote-detail-row', function (
                 'prompt'=>Yii::t('app','Select Customer')
             ]);?></div>
         <div class="col-md-6">
-
             <?php
-
             // Contact
             echo $form->field($quote, 'contact_id')->widget(DepDrop::classname(), [
                 'options'=>['id'=>'subcat-id'],
@@ -72,10 +70,7 @@ $this->registerJs(" $(document).on('mouseenter', '.quote-detail-row', function (
                 ]
             ]);?></div>
         <div class="col-md-6">
-
             <?php
-
-
             // I'll need to find a way to make these widgets easier in the long run
             echo $form->field($quotePricing, 'patternNumber')->widget(Typeahead::classname(), [
                 'scrollable' => true,
@@ -147,7 +142,7 @@ $this->registerJs(" $(document).on('mouseenter', '.quote-detail-row', function (
             <div class="col-xs-6 col-md-2">
                 <?=$form->field($detail,"[$index]material",['template'=>'{input}'])->input('number', ['step'=>'0.01']);?>
             </div>
-            <button type="button" class="btn btn-sm btn-danger" style="display: none;" id="i">
+            <button type="button" class="btn btn-sm btn-danger" style="display: none;" id="quote-detail-remove">
                 <i class="glyphicon glyphicon-remove"></i>
             </button>
         </div>

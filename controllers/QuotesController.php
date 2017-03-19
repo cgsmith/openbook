@@ -2,12 +2,15 @@
 
 namespace app\controllers;
 
+use app\models\Company;
 use app\models\Customers;
 use app\models\Quotedetails;
 use app\models\Quotepricing;
 use Yii;
 use app\models\Quotes;
 use app\models\QuotesSearch;
+use yii\base\Model;
+use yii\db\Expression;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
@@ -131,16 +134,47 @@ class QuotesController extends Controller
     {
         $activeCustomers = ArrayHelper::map($this->getActiveCustomers(), 'id', 'name');
         $quote = $this->findModel($id, $revision);
-        $quotePricing = Quotepricing::find()->where([
-            'quote_id' => $quote->id,
-            'revision' => $quote->revision
-        ])->one();
+        $quotePricing = $quote->getPricing()->one();
         $quoteDetails = $quote->getDetails()->orderBy('lineItemOrder')->all();
 
+        // Update the quote if we are posting - first validate
+        if ($postData = Yii::$app->request->post()) {
+            unset($quoteDetails, $quotePricing); // If we are posting we're going to blow the post data away
+            $quote->load($postData); // Load the quote with form data
+            $quote->save();
 
-        if ($quote->load(Yii::$app->request->post())) {
-            var_dump(Yii::$app->request->post());
-            die;
+            // @todo: link to company
+            $company = Company::findOne(['id'=>1]); // get shoprate and margin info
+            // Save Quote Details
+            $i=0;
+            $totalHours = 0;
+            $totalMaterial = 0;
+            $shopRate = $company->getAttribute('shoprate');
+            $shopMargin = ($company->getAttribute('margin') / 100) + 1;
+            foreach ($postData['Quotedetails'] as $postDataQuoteDetail) {
+                $i++; // used to track individual instructions
+                $quoteDetails[$i] = new Quotedetails();
+                $quoteDetails[$i]->setAttributes($postDataQuoteDetail);
+                $quoteDetails[$i]->setAttribute('quote_id', $quote->id);
+                $quoteDetails[$i]->setAttribute('revision', $quote->revision);
+                $totalHours += $quoteDetails[$i]->hours;
+                $totalMaterial += $quoteDetails[$i]->material;
+                $quoteDetails[$i]->save();
+            }
+            $totalPrice = (($totalHours * $shopRate) + $totalMaterial) * ($shopMargin);
+
+            // Save quote pricing
+            $quotePricing = new Quotepricing();
+            $quotePricing->load($postData);
+            $quotePricing->setAttribute('totalHours', $totalHours);
+            $quotePricing->setAttribute('totalMaterial', $totalMaterial);
+            $quotePricing->setAttribute('totalPrice', $totalPrice);
+            $quotePricing->setAttribute('shopRate', $shopRate);
+            $quotePricing->setAttribute('revision', $quote->revision);
+            $quotePricing->setAttribute('margin', $company->getAttribute('margin')); // saved as shop margin in quotePricing table
+            $quotePricing->setAttribute('dateIssued', (new Expression('NOW()'))); // Current date for new quote
+            $quotePricing->save();
+
             return $this->redirect([
                 'view',
                 'id' => $quote->id,
