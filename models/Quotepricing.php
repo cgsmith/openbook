@@ -41,7 +41,7 @@ class Quotepricing extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['quote_id', 'estimatedDelivery', 'totalPrice', 'totalHours', 'totalMaterial', 'margin', 'shopRate', 'patternOwner', 'patternNumber', 'dateIssued', 'category', 'quotedby'], 'required'],
+            [['quote_id', 'totalPrice', 'totalHours', 'totalMaterial', 'margin', 'shopRate', 'patternOwner', 'patternNumber', 'dateIssued', 'quotedby'], 'required'],
             [['quote_id', 'margin', 'revision', 'job_id'], 'integer'],
             [['viewed', 'emailed', 'dateIssued'], 'safe'],
             [['totalPrice', 'totalHours', 'totalMaterial', 'shopRate'], 'number'],
