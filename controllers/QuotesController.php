@@ -144,9 +144,9 @@ class QuotesController extends Controller
             $quote->save();
 
             // @todo: link to company
-            $company = Company::findOne(['id'=>1]); // get shoprate and margin info
+            $company = Company::findOne(['id' => 1]); // get shoprate and margin info
             // Save Quote Details
-            $i=0;
+            $i = 0;
             $totalHours = 0;
             $totalMaterial = 0;
             $shopRate = $company->getAttribute('shoprate');
@@ -206,12 +206,36 @@ class QuotesController extends Controller
     }
 
 
-    public function actionClone($id, $revision)
+    public function actionClone($id, $revision = 0)
     {
-        $cloneQuote;
+        $quote = $this->findModel($id, $revision);
+        $quotePricing = $quote->pricing;
+        $quoteDetails = $quote->details;
 
-        return $this->redirect(['update', 'id' => $this->id]);
+        // Insert new quote
+        $cloneQuote = new Quotes();
+        $cloneQuote->setAttributes($quote->attributes);
+        $cloneQuote->setAttributes(['job_id' => 0, 'revision' => 0]); // Set job and revision to 0 since we are cloning
+        $cloneQuote->save();
+
+        // Insert new pricing
+        $cloneQuotePricing = new Quotepricing();
+        $attributesToChange = ['quote_id'=>$cloneQuote->id, 'emailed' => null, 'viewed' => null, 'job_id' => 0, 'revision' => 0, 'dateIssued' => date('Y-m-d'), 'estimatedDelivery' => ''];
+        $cloneQuotePricing->setAttributes($quotePricing->attributes);
+        $cloneQuotePricing->setAttributes($attributesToChange);
+        $cloneQuotePricing->save();
+
+        // Insert details
+        foreach ($quoteDetails as $quoteDetail) {
+            $cloneQuoteDetail = new Quotedetails();
+            $cloneQuoteDetail->setAttributes($quoteDetail->attributes);
+            $cloneQuoteDetail->setAttributes(['quote_id'=>$cloneQuote->id,'revision'=>0]);
+            $cloneQuoteDetail->save();
+        }
+        Yii::$app->getSession()->setFlash('success', ['body' => Yii::t('app','Quote successfully cloned')]);
+        return $this->redirect(['update', 'id' => $cloneQuote->id]);
     }
+
 
     /**
      * Finds the Quotes model based on its primary key value.
